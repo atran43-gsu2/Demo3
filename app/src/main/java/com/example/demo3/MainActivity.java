@@ -5,14 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button mSendData;
-    private DatabaseReference mRef;
+    private EditText mValueField;
+    private Button mAddBtn;
+    private EditText mKeyValue;
+
+    private DatabaseReference mRootRef;
 
 
     @Override
@@ -20,18 +24,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRef = FirebaseDatabase.getInstance().getReference();
+        mRootRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
-        mSendData = (Button) findViewById(R.id.sendData);
+        mValueField = (EditText) findViewById(R.id.valueField);
+        mAddBtn = (Button) findViewById(R.id.addBtn);
+        mKeyValue = (EditText) findViewById(R.id.keyValue);
 
-        mSendData.setOnClickListener(new View.OnClickListener() {
+
+        mAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                DatabaseReference mRefChild = mRef.child("Name");
+                String value = mValueField.getText().toString();
+                String key = mKeyValue.getText().toString();
 
-                mRefChild.setValue("Budaje");
-
+                DatabaseReference childRef = mRootRef.child(key);
+                childRef.setValue(value);
             }
         });
 
